@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ArtistFactory extends Factory
@@ -14,7 +15,8 @@ class ArtistFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->userName(),
+            'category_id' => Category::all()->random()->id,
         ];
     }
 }

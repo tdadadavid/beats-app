@@ -13,24 +13,21 @@ class CreateSongTable extends Migration
      */
     public function up()
     {
-        Schema::create('song', function (Blueprint $table) {
-            Schema::create('songs', function (Blueprint $table) {
-                $table->id();
-                $table->string('name');
-                $table->string('image')->nullable();
-                $table->foreign('artist_id')->references('artists');
-                $table->foreign('category_id' )->references('category');
-                $table->string('duration');
-                $table->enum('category' ,
-                    ['Gospel' , 'Hip-Hop' , 'Country' , 'Jazz' , 'Rock' , 'sleep' , 'Others']
-                );
-                $table->integer('no_of_likes')->nullable();
-                $table->integer('no_of_dislikes')->nullable();
-                $table->integer('size')->nullable();
-                $table->timestamps();
-                $table->softDeletes();
-            });
+        Schema::create('songs', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('image')->nullable();
+            $table->foreignId('artist_id')->constrained('artists');
+            $table->foreignId('category_id')->constrained('categories');
+            $table->string('duration');
+            $table->string('date_of_release');
+            $table->integer('no_of_likes')->default(0);
+            $table->integer('no_of_dislikes')->default(0);
+            $table->integer('file_size')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
         });
+
     }
 
     /**
@@ -40,6 +37,6 @@ class CreateSongTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('song');
+        Schema::dropIfExists('songs');
     }
 }

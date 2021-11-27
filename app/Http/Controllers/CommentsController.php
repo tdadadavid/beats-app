@@ -3,18 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comments;
+use App\traits\ApiResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Js;
 
 class CommentsController extends Controller
 {
+    use ApiResponse;
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $comments = Comments::all();
+
+        return $this->successResponse($comments);
     }
 
     /**

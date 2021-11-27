@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateArtistsTable extends Migration
+class CreateCommentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreateArtistsTable extends Migration
      */
     public function up()
     {
-        Schema::create('artists', function (Blueprint $table) {
+        Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('category_id')->constrained('categories');
-            $table->string('image')->nullable();
-            $table->integer('followers')->nullable();
-            $table->integer('rating')->nullable();
+            $table->string('comments')->nullable();
+            $table->foreignId('song_id')->constrained('songs');
+            $table->foreignID('user_id')->constrained('users');
             $table->timestamps();
             $table->softDeletes();
+
         });
     }
 
@@ -32,6 +31,6 @@ class CreateArtistsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('artists');
+        Schema::dropIfExists('comments');
     }
 }

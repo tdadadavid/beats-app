@@ -2,11 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\Comments;
 use App\Models\Song;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class CommentsFactory extends Factory
+class ReplyFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -16,8 +17,9 @@ class CommentsFactory extends Factory
     public function definition()
     {
         return [
+            'reply' => $this->faker->paragraph(1 , 20),
             'song_id' => Song::all()->random()->id,
-            'comments' => $this->faker->paragraph(2 ,100),
+            'comment_id' => Comments::all()->random()->id,
             'user_id' => User::all()->random()->id,
         ];
     }

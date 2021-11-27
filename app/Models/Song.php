@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
+use DirectoryIterator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Song extends Model
 {
-    use HasFactory;
+    use HasFactory , SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -41,10 +43,18 @@ class Song extends Model
         return $this->belongsToMany(Category::class);
     }
 
-    public function sizeOfSong()
-    {
+//    public function read_to_database($file)
+//    {
+//        $open = fopen('' , 'r');
+//
+//        while (!feof($open)){
+//            $current_line_in_file = fgets($open);
+//            $break = explode(',' , $current_line_in_file);
+//
+//        }
+//
+//    }
 
-    }
 
 }
 
