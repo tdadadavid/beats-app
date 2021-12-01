@@ -1,10 +1,19 @@
 <?php
 
 use App\Http\Controllers\ArtistController;
+use App\Http\Controllers\ArtistFollowersController;
+use App\Http\Controllers\ArtistSongController;
+use App\Http\Controllers\CategoryArtistController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CategorySongController;
+use App\Http\Controllers\CategoryUserController;
 use App\Http\Controllers\CommentsController;
+use App\Http\Controllers\ReplyController;
+use App\Http\Controllers\SongArtistController;
 use App\Http\Controllers\SongController;
+use App\Http\Controllers\SongUserController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserSongController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,13 +32,26 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
+Route::apiResources([
+    'categories' => CategoryController::class, // cannot delete or update only see
+    'comments' => CommentsController::class,
+    'replies' => ReplyController::class,
+],
+    ['only' => ['index' , 'show']]
+);
 
 Route::apiResources([
     'songs' => SongController::class,
-    'categories' => CategoryController::class,
     'artists' => ArtistController::class,
     'users' => UserController::class,
-    'comments' => CommentsController::class,
+    'categories.songs' => CategorySongController::class,
+    'categories.users' => CategoryUserController::class,
+    'categories.artist' => CategoryArtistController::class,
+    'artists.followers' => ArtistFollowersController::class,
+    'artists.songs' => ArtistSongController::class,
+    'songs.artist' => SongArtistController::class,
+    'songs.users' => SongUserController::class,
+    'users.songs' => UserSongController::class,
 ]);
 
 /*

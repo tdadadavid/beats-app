@@ -6,8 +6,11 @@ use DirectoryIterator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\JsonResponse;
 
 class Song extends Model
 {
@@ -27,10 +30,14 @@ class Song extends Model
         'date_of_release' => 'datetime'
     ];
 
+    protected $hidden = [
+        'pivot'
+    ];
 
-    public function users(): HasMany
+
+    public function users(): BelongsToMany
     {
-        return $this->hasMany(User::class);
+        return $this->belongsToMany(User::class);
     }
 
     public function artist(): BelongsTo
@@ -38,9 +45,9 @@ class Song extends Model
         return $this->belongsTo(Artist::class);
     }
 
-    public function category()
+    public function category(): HasOne
     {
-        return $this->belongsToMany(Category::class);
+        return $this->hasOne(Category::class);
     }
 
 //    public function read_to_database($file)

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -14,11 +15,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, SoftDeletes , HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
+    protected $table = 'users';
+
     protected $fillable = [
         'name',
         'email',
@@ -26,28 +24,21 @@ class User extends Authenticatable
         'image'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password',
         'remember_token',
+        'pivot',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
 
-    public function songs(): HasMany
+
+
+    public function songs(): BelongsToMany
     {
-        return $this->hasMany(Song::class);
+        return $this->belongsToMany(Song::class);
     }
 
     public function comments()

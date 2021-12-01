@@ -3,86 +3,93 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return JsonResponse
-     */
+
+    use ApiResponse;
+
     public function index(): JsonResponse
     {
         $users = User::all();
 
-        return response()->json($users);
+        return $this->showAll($users);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function store(Request $request): JsonResponse
     {
-        //
+        $rules = [
+            'name' => ['bail' , 'required' , 'min:0' , 'max:100'],
+            'email' => ['bail' , 'required' , 'unique:users'],
+            'password' => ['bail' , 'required' , 'min:8']
+        ];
+
+        $this->validate($request , $rules);
+
+        $newUser = new User();
+
+        $newUser->name = $request->name;
+        $newUser->email = $request->email;
+        $newUser->image = $request->image ?? null;
+        $newUser->password = Hash::make($request->password);
+
+        $newUser->saveOrFail();
+
+        return $this->showOne($newUser);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
+
+    public function show(User $user): JsonResponse
     {
-        //
+        return $this->showOne($user);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(User $user)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, User $user)
+
+    public function update(Request $request, User $user): JsonResponse
     {
-        //
+        $rules = [
+            'name' => ['bail' , 'min:0' , 'max:100'],
+            'email' => ['bail', 'unique:users'],
+            'password' => ['bail', 'min:8']
+        ];
+
+        $this->validate($request , $rules);
+
+        $user->name = $request->name ?? $user->name;
+        $user->email = $request->email ?? $user->email;
+        $user->password = $request->pasword ?? $user->password;
+
+        if ($user->isClean())
+            return $this->errorResponse("No field was changed for update" , 400);
+
+        return  $this->showOne($user);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(User $user)
+
+    public function destroy(User $user): JsonResponse
     {
-        //
+        $user->deleteOrFail();
+
+        return $this->showOne($user);
     }
 }

@@ -10,6 +10,8 @@ class Category extends Model
 {
     use HasFactory , SoftDeletes;
 
+
+    protected $table = 'categories';
     protected $fillable = [
         'category_name',
         'image'
@@ -23,5 +25,10 @@ class Category extends Model
     public function users()
     {
         return $this->hasMany(User::class);
+    }
+
+    public function artists()
+    {
+        return $this->hasMany(Artist::class);
     }
 }

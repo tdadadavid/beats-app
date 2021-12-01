@@ -12,34 +12,21 @@ use Illuminate\Http\Response;
 class SongController extends Controller
 {
     use ApiResponse;
-    /**
-     * Display a listing of the resource.
-     *
-     * @return JsonResponse
-     */
+
+
     public function index(): JsonResponse
     {
         $songs = Song::all();
 
-        return $this->successResponse($songs);
+        return $this->showAll($songs);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function ofcreate()
+    public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return JsonResponse
-     */
+
     public function store(Request $request)
     {
         $rules = [
@@ -68,39 +55,22 @@ class SongController extends Controller
 
         $newSong->save();
 
-        return $this->successResponse($newSong);
+        return $this->showOne($newSong);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param Song $song
-     * @return JsonResponse
-     */
+
     public function show(Song $song): JsonResponse
     {
-        return $this->successResponse($song);
+        return $this->showOne($song);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Song $song
-     * @return Response
-     */
+
     public function edit(Song $song)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param Song $song
-     * @return JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
-     */
+
     public function update(Request $request, Song $song): JsonResponse
     {
         $rules = [
@@ -118,22 +88,17 @@ class SongController extends Controller
 
         if ($song->isClean())
             return $this
-                ->errorResponse("No attribute was changed, fields needs to be changed to update" , 400);
+                ->errorResponse("No field was changed update" , 400);
 
         $song->save();
 
-        return $this->successResponse($song);
+        return $this->showOne($song);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Song $song
-     * @return JsonResponse
-     */
+
     public function destroy(Song $song): JsonResponse
     {
         $song->delete();
-        return $this->successResponse($song);
+        return $this->showOne($song);
     }
 }

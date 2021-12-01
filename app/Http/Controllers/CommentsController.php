@@ -6,28 +6,24 @@ use App\Models\Comments;
 use App\traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Js;
+use Throwable;
 
-class CommentsController extends Controller
+class CommentsController extends ApiController
 {
-    use ApiResponse;
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return JsonResponse
-     */
     public function index(): JsonResponse
     {
         $comments = Comments::all();
 
-        return $this->successResponse($comments);
+        return $this->showAll($comments);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -38,7 +34,7 @@ class CommentsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -48,19 +44,19 @@ class CommentsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Comments  $comments
-     * @return \Illuminate\Http\Response
+     * @param Comments $comments
+     * @return JsonResponse
      */
-    public function show(Comments $comments)
+    public function show(Comments $comment): JsonResponse
     {
-        //
+        return $this->showOne($comment);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Comments  $comments
-     * @return \Illuminate\Http\Response
+     * @param Comments $comments
+     * @return Response
      */
     public function edit(Comments $comments)
     {
@@ -71,22 +67,26 @@ class CommentsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Comments  $comments
-     * @return \Illuminate\Http\Response
+     * @param Comments $comments
+     * @return Response
      */
     public function update(Request $request, Comments $comments)
     {
-        //
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Comments  $comments
-     * @return \Illuminate\Http\Response
+     * @param Comments $comments
+     * @return JsonResponse
+     * @throws Throwable
      */
-    public function destroy(Comments $comments)
+    public function destroy(Comments $comments): JsonResponse
     {
-        //
+        //delete this comment
+        $comments->deleteOrFail();
+
+        return $this->showOne($comments);
     }
 }

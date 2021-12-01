@@ -15,9 +15,7 @@ class CreateCategoriesTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->enum('name' , [
-                ['Gospel' , 'Hip-Hop' , 'Country' , 'Jazz' , 'Rock' , 'sleep' , 'Others']
-            ])->unique();
+            $table->string('name')->unique();
             $table->string('image_link')->nullable();
             $table->timestamps();
             $table->softDeletes();

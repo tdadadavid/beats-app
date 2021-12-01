@@ -18,7 +18,6 @@ class CreateArtistsTable extends Migration
             $table->string('name');
             $table->foreignId('category_id')->constrained('categories');
             $table->string('image')->nullable();
-            $table->integer('followers')->nullable();
             $table->integer('rating')->nullable();
             $table->timestamps();
             $table->softDeletes();

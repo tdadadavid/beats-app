@@ -10,39 +10,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Js;
 use Illuminate\Validation\ValidationException;
 
-class ArtistController extends Controller
+class ArtistController extends ApiController
 {
-    use ApiResponse;
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return JsonResponse
-     */
     public function index(): JsonResponse
     {
         $artists = Artist::all();
 
-        return $this->successResponse($artists);
+        return $this->showAll($artists);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return JsonResponse
-     * @throws ValidationException
-     */
+
     public function store(Request $request): JsonResponse
     {
         $rules = [
@@ -60,58 +44,25 @@ class ArtistController extends Controller
         $newArtist->followers = $request->followers;
         $newArtist->rating = $request->rating;
 
-//        if (in_array($newArtist['category_id'] , $categories)){
-//
-//            $category_no = $newArtist['category_id'];
-//
-//            $category_id = match ($category_no) {
-//                1 => "Others",
-//                2 => "Hip-Hop",
-//                3 => "Sleep",
-//                4 => "Gospel",
-//                5 => "Country",
-//                6 => "Rock",
-//                7 => "Jazz",
-//                default => $newArtist['category_id'],
-//            };
-//        }
-
        $newArtist->save();
 
-        return $this->successResponse($newArtist);
+        return $this->showOne($newArtist);
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param Artist $artist
-     * @return JsonResponse
-     */
+
     public function show(Artist $artist): JsonResponse
     {
-        return $this->successResponse($artist);
+        return $this->showOne($artist);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Artist $artist
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(Artist $artist)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param Artist $artist
-     * @return JsonResponse
-     * @throws ValidationException
-     */
+
     public function update(Request $request, Artist $artist): JsonResponse
     {
         $rules = [
@@ -125,24 +76,18 @@ class ArtistController extends Controller
         $artist->category_id = $request->category_id ?? $artist->category_id;
 
         if ($artist->isClean())
-            return $this
-                ->errorResponse("No attribute was changed, fields needs to be changed to update" , 400);
+            return $this->errorResponse("No field was changed update" , 400);
 
         $artist->save();
 
-        return $this->successResponse($artist);
+        return $this->showOne($artist);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Artist $artist
-     * @return JsonResponse
-     */
+
     public function destroy(Artist $artist): JsonResponse
     {
         $artist->delete();
 
-        return $this->successResponse($artist);
+        return $this->showOne($artist);
     }
 }
