@@ -27,30 +27,6 @@ class UserController extends Controller
         return $this->showAll($users);
     }
 
-
-    /** @throws ValidationException */
-    public function store(Request $request): JsonResponse
-    {
-        $this->validate($request , $this->validationRulesForNameEmailandPassword());
-
-        $newUser = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'image' => $request->image ?? null,
-            'password' => Hash::make($request->password)
-        ]);
-
-
-        $newUser->verification_token = Str::random(40);
-        $newUser->notify(new WelcomeNotificationEmail($newUser));
-
-        $newUser = UserResource::make($newUser);
-        return $this->showOne($newUser);
-
-        // remove the store or register method
-    }
-
-
     public function show(User $user): JsonResponse
     {
         $user = UserResource::make($user);

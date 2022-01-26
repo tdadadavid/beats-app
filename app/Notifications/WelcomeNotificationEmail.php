@@ -40,7 +40,6 @@ class WelcomeNotificationEmail extends Notification
      */
     public function toMail($notifiable)
     {
-
         return (new MailMessage)
                     ->line("Welcome")
                     ->line('We kindly need you to verify your email')

@@ -6,6 +6,8 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Notifications\VerifyEmailNotification;
 use App\Notifications\WelcomeNotificationEmail;
+use App\Providers\NewUserEmailNotification;
+use App\Providers\NewUserRegistration;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -28,13 +30,12 @@ class UserRegistrationController extends ApiController
            'verified' => User::UNVERIFIED,
            'verification_token' => Str::random(40),
            'password' => Hash::make($request->password)
+
        ]);
 
-        // save user
-        $newUser->save();
         // Send user a welcome notification email
-        $newUser->notify(new WelcomeNotificationEmail($newUser));
-        
+        event(new NewUserRegistration($newUser));
+
         $result = UserResource::make($newUser);
         return $this->showOne($result);
     }
@@ -44,6 +45,7 @@ class UserRegistrationController extends ApiController
         if ($user->verified === true)
             return $this->errorResponse("You're already a verified user. " , 409);
 
+//        event( new VerifyEmailNotification($user));
         $user->notify(new VerifyEmailNotification($user));
 
         return $this->showOne("Check your email for the verification code!");
@@ -66,15 +68,13 @@ class UserRegistrationController extends ApiController
     private function validationRules(): array {
 
         return [
-            'name' => ['bail' , 'required' , 'string' , 'max:255'],
-            'email' => ['bail', 'required', 'email', 'max:255', 'unique:users'],
-            'password' => ['bail', 'required' , Password::min(8)
-                                                        ->mixedCase()
-                                                        ->numbers()
-                                                        ->symbols()
-                                                        ->uncompromised()
+            'name' => 'bail|required|string|max:255',
+            'email' => 'bail|required|email|max:255|unique:users',
+            'password' => ['bail' , 'required', Password::min(8)
+                                            ->mixedCase()->numbers()
+                                            ->symbols()->uncompromised()
             ],
-            'confirm_password' => ['required' , 'same:password']
+            'confirm_password' => 'required|same:password'
         ];
     }
 
