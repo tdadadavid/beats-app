@@ -15,13 +15,16 @@ class User extends Authenticatable
 {
     use HasApiTokens, SoftDeletes , HasFactory, Notifiable;
 
-    protected $table = 'users';
+    const VERIFIED = 1;
+    const UNVERIFIED = 0;
 
     protected $fillable = [
         'name',
         'email',
         'password',
-        'image'
+        'image',
+        'verified',
+        'verification_token'
     ];
 
     protected $hidden = [
@@ -32,8 +35,8 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'verified' => 'bool'
     ];
-
 
 
     public function songs(): BelongsToMany
@@ -46,18 +49,9 @@ class User extends Authenticatable
         return $this->hasMany(Comments::class);
     }
 
-    public static function randomStr()
+    public function isVerified(): bool
     {
-        $letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuiwxyz';
-        $numbers = '0123456789';
-        $randomString  = '';
-        $randomNum = '';
-
-        for ($i = 0; $i <= 10;  $i++){
-            $randomString = $letters[rand(0 , strlen($letters))];
-            $randomNum = $numbers[rand(0 , strlen($numbers))];
-        }
-
-        return $randomString . $randomNum;
+        return $this->verified ===  self::VERIFIED;
     }
+
 }

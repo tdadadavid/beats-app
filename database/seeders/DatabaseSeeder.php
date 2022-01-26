@@ -23,26 +23,31 @@ class DatabaseSeeder extends Seeder
 
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
 //
-//        DB::table('users')->truncate();
-//        DB::table('categories')->truncate();
-//        DB::table('artists')->truncate();
+        DB::table('users')->truncate();
+        DB::table('categories')->truncate();
+        DB::table('artists')->truncate();
         DB::table('comments')->truncate();
-//        DB::table('songs')->truncate();
+        DB::table('songs')->truncate();
         DB::table('replies')->truncate();
-//        DB::table('artist_user')->truncate();
-//        DB::table('song_user')->truncate();
+        DB::table('artist_user')->truncate();
+        DB::table('song_user')->truncate();
 
-//        Category::factory(7)->create();
-//        User::factory(1000)->create();
+        Category::factory(7)->create();
+        User::factory(1000)->create();
 
-//        Artist::factory(500)->create();
+        Artist::factory(500)->create()->each(
+            function ($artist){
+                $user = User::all()->random(mt_rand(1,1000))->pluck('id');
+                $artist->users()->attach($user);
+            }
+        );
 
-//        Song::factory(700)->create()->each(
-//            function ($song){
-//                $user = User::all()->random(mt_rand(1,1000))->pluck('id');
-//                $song->users()->attach($user);
-//            }
-//        );
+        Song::factory(700)->create()->each(
+            function ($song){
+                $user = User::all()->random(mt_rand(1,1000))->pluck('id');
+                $song->users()->attach($user);
+            }
+        );
 
         Comments::factory(400)->create();
         Reply::factory(100)->create();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RepliesResource;
 use App\Models\Reply;
 use App\traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
@@ -16,7 +17,8 @@ class ReplyController extends ApiController
     {
         $replies = Reply::all();
 
-        return $this->successResponse($replies);
+        $replies = RepliesResource::collection($replies);
+        return $this->showAll($replies);
     }
 
 
@@ -34,25 +36,29 @@ class ReplyController extends ApiController
 
     public function show(Reply $reply): JsonResponse
     {
+        $reply = RepliesResource::collection($reply);
         return $this->showOne($reply);
     }
 
 
     public function edit(Reply $reply)
     {
-        //
+
     }
 
 
     public function update(Request $request, Reply $reply)
     {
-        //
+
     }
 
     public function destroy(Reply $reply): JsonResponse
     {
-        //delete this reply
+        // delete this reply
         $reply->deleteOrFail();
+
+        // transform the reply
+        $reply = RepliesResource::collection($reply);
 
         // display the deleted reply
         return $this->showOne($reply);

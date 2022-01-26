@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ArtistResource;
 use App\Models\Artist;
 use App\traits\ApiResponse;
 use http\Env\Response;
@@ -17,13 +18,8 @@ class ArtistController extends ApiController
     {
         $artists = Artist::all();
 
+        $artists = ArtistResource::collection($artists);
         return $this->showAll($artists);
-    }
-
-
-    public function create()
-    {
-        //
     }
 
 
@@ -46,13 +42,15 @@ class ArtistController extends ApiController
 
        $newArtist->save();
 
-        return $this->showOne($newArtist);
+       $newArtist = ArtistResource::collection($newArtist);
+       return $this->showOne($newArtist);
 
     }
 
 
     public function show(Artist $artist): JsonResponse
     {
+        $artist = ArtistResource::collection($artist);
         return $this->showOne($artist);
     }
 
@@ -80,6 +78,7 @@ class ArtistController extends ApiController
 
         $artist->save();
 
+        $artist = ArtistResource::collection($artist);
         return $this->showOne($artist);
     }
 
@@ -88,6 +87,7 @@ class ArtistController extends ApiController
     {
         $artist->delete();
 
+        $artist = ArtistResource::collection($artist);
         return $this->showOne($artist);
     }
 }

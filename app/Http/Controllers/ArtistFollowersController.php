@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\Artist;
 use App\traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
@@ -13,6 +14,7 @@ class ArtistFollowersController extends ApiController
     {
         $followers = $artist->users()->get();
 
+        $followers = UserResource::collection($followers);
         return $this->showAll($followers);
 
     }

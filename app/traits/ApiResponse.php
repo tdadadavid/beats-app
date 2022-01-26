@@ -4,6 +4,7 @@ namespace App\traits;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 trait ApiResponse
 {
@@ -14,10 +15,10 @@ trait ApiResponse
 
     private function singleSuccessResponse($data , $code): JsonResponse
     {
-        return response()->json($data , $code);
+        return response()->json(["data" => $data], $code);
     }
 
-    protected function showAll(Collection $data , $code = 200): JsonResponse
+    public function showAll($data , $code = 200): JsonResponse
     {
         return $this->successResponse($data , $code);
     }
@@ -31,6 +32,8 @@ trait ApiResponse
     {
         return response()->json(['message' => $message , 'code' => $code] , $code);
     }
+
+
 
 
 }

@@ -13,6 +13,8 @@ use App\Http\Controllers\SongArtistController;
 use App\Http\Controllers\SongController;
 use App\Http\Controllers\SongUserController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserLoginController;
+use App\Http\Controllers\UserRegistrationController;
 use App\Http\Controllers\UserSongController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -45,7 +47,6 @@ Route::apiResources([
     'artists' => ArtistController::class,
     'users' => UserController::class,
     'categories.songs' => CategorySongController::class,
-    'categories.users' => CategoryUserController::class,
     'categories.artist' => CategoryArtistController::class,
     'artists.followers' => ArtistFollowersController::class,
     'artists.songs' => ArtistSongController::class,
@@ -54,8 +55,11 @@ Route::apiResources([
     'users.songs' => UserSongController::class,
 ]);
 
-/*
- * How to read from file into database
- * work on routes
- * then work on model-relationships
- */
+Route::post('users/{user}/songs/{song}' , [UserSongController::class , 'subscribe']);
+Route::get('users/{user}/songs/{song}' , [UserSongController::class , 'unsubscribe']);
+
+Route::get('/login' , [UserLoginController::class , 'login']);
+Route::post('/register' , [UserRegistrationController::class , 'register']);
+
+Route::name('user.resend')->get('users/{user}/resend' , [UserRegistrationController::class, 'sendVerificationCode']);
+Route::name('user.verify')->get('users/verify/{token}' , [UserRegistrationController::class , 'verifyEmail']);

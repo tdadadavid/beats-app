@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SongResource;
 use App\Models\Song;
 use App\traits\ApiResponse;
 use Carbon\Carbon;
@@ -18,6 +19,7 @@ class SongController extends Controller
     {
         $songs = Song::all();
 
+        $songs = SongResource::collection($songs);
         return $this->showAll($songs);
     }
 
@@ -55,12 +57,14 @@ class SongController extends Controller
 
         $newSong->save();
 
+        $newSong = SongResource::make($newSong);
         return $this->showOne($newSong);
     }
 
 
     public function show(Song $song): JsonResponse
     {
+        $song = SongResource::make($song);
         return $this->showOne($song);
     }
 
@@ -75,7 +79,7 @@ class SongController extends Controller
     {
         $rules = [
             'name' => 'string',
-            'category_id' => 'min:1|max:7',
+            'category_id' => 'min:1|max:7|',
             'duration' => 'integer|min:1|max:100000'
         ];
 
@@ -92,6 +96,7 @@ class SongController extends Controller
 
         $song->save();
 
+        $song = SongResource::collection($song);
         return $this->showOne($song);
     }
 
@@ -99,6 +104,7 @@ class SongController extends Controller
     public function destroy(Song $song): JsonResponse
     {
         $song->delete();
+        $song = SongResource::collection($song);
         return $this->showOne($song);
     }
 }

@@ -10,7 +10,8 @@
         "guzzlehttp/guzzle": "^7.4.0",
         "laravel/framework": "^v8.65.0.0",
         "laravel/sanctum": "^v2.12.0",
-        "laravel/tinker": "^v2.6.2"
+        "laravel/tinker": "^v2.6.2",
+        "myclabs/php-enum": "^1.8"
     },
     "require-dev": {
         "facade/ignition": "^2.15.0",

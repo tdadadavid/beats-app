@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ArtistResource;
 use App\Models\Song;
 use App\traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
@@ -16,6 +17,7 @@ class SongArtistController extends Controller
     {
         $artist = $song->artist()->get();
 
+        $artist = ArtistResource::collection($artist);
         return $this->showOne($artist);
     }
 

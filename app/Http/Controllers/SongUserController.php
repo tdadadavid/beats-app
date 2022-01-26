@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\Song;
 use App\traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
@@ -15,6 +16,7 @@ class SongUserController extends Controller
     {
         $users = $song->users()->get();
 
+        $users = UserResource::collection($users);
         return $this->showAll($users);
     }
 }

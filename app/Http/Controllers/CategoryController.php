@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
@@ -14,11 +15,13 @@ class CategoryController extends ApiController
     {
         $categories = Category::all();
 
+        $categories = CategoryResource::collection($categories);
         return $this->showAll($categories);
     }
 
     public function show(Category $category): JsonResponse
     {
+        $category = CategoryResource::collection($category);
         return $this->showOne($category);
     }
 
