@@ -38,7 +38,7 @@ class WelcomeNotificationEmail extends Notification
      * @param  mixed  $notifiable
      * @return MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
                     ->line("Welcome")

@@ -27,6 +27,7 @@ class UserRegistrationTest extends TestCase
         $this->withExceptionHandling()
             ->withHeader('Accept' , 'application/json')
             ->json('post' , 'api/register' , ['name' => 'Sally'])
-            ->assertStatus(405);
+            ->assertStatus(422);
     }
+
 }

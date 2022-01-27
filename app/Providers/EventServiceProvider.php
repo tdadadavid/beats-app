@@ -23,6 +23,10 @@ class EventServiceProvider extends ServiceProvider
         NewUserRegistration::class => [
             NewUserEmailNotification::class,
         ],
+
+        VerificationCodeResend::class => [
+            ResendEmailVerificationCode::class
+        ],
     ];
 
     /**

@@ -5,13 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Notifications\VerifyEmailNotification;
-use App\Notifications\WelcomeNotificationEmail;
-use App\Providers\NewUserEmailNotification;
 use App\Providers\NewUserRegistration;
+use App\Providers\VerificationCodeResend;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 
@@ -36,17 +34,20 @@ class UserRegistrationController extends ApiController
         // Send user a welcome notification email
         event(new NewUserRegistration($newUser));
 
+        // refactor the database fields
         $result = UserResource::make($newUser);
+
+        // return the new user instance
         return $this->showOne($result);
     }
 
     public function sendVerificationCode(User $user): JsonResponse
     {
+        // check if the user is already verified
         if ($user->verified === true)
-            return $this->errorResponse("You're already a verified user. " , 409);
+            return $this->errorResponse("You're already a verified user." , 409);
 
-//        event( new VerifyEmailNotification($user));
-        $user->notify(new VerifyEmailNotification($user));
+        event(new VerificationCodeResend($user));
 
         return $this->showOne("Check your email for the verification code!");
     }
