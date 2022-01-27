@@ -18,7 +18,7 @@ class UserRegistrationController extends ApiController
     public function register(Request $request): JsonResponse
     {
         // validate the request
-       $this->validate($request , $this->validationRules());
+       $this->validate($request , self::validationRules());
 
        // create a new user
        $newUser = User::create([
@@ -44,8 +44,9 @@ class UserRegistrationController extends ApiController
     public function sendVerificationCode(User $user): JsonResponse
     {
         // check if the user is already verified
-        if ($user->verified === true)
-            return $this->errorResponse("You're already a verified user." , 409);
+        // if the user is verified continue or else throw error response
+        if($user->verified)
+            return $this->errorResponse("You're already a  verified user" ,409);
 
         event(new VerificationCodeResend($user));
 
@@ -54,19 +55,24 @@ class UserRegistrationController extends ApiController
 
     public function verifyEmail($token): JsonResponse
     {
-        $user = User::where('verification_token' , $token)->firstOrFail();
+        // find the user with this token
+        $user = User::where('verification_token' , $token)
+                        ->firstOrFail();
 
+
+        // update the necessary fileds
         $user->verification_token = null;
         $user->verified = User::VERIFIED;
         $user->email_verified_at = now();
 
+        // persist the changes
         $user->save();
 
+        // return message
         return $this->showOne("Your account has been successfully verified");
-
     }
 
-    private function validationRules(): array {
+    private static function validationRules(): array {
 
         return [
             'name' => 'bail|required|string|max:255',
@@ -77,6 +83,7 @@ class UserRegistrationController extends ApiController
             ],
             'confirm_password' => 'required|same:password'
         ];
+
     }
 
 }
