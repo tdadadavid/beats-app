@@ -74,6 +74,7 @@ class UserRegistrationController extends ApiController
 
     private static function validationRules(): array {
 
+        // validation rules
         return [
             'name' => 'bail|required|string|max:255',
             'email' => 'bail|required|email|max:255|unique:users',
