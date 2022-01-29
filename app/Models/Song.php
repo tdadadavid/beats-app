@@ -17,13 +17,10 @@ class Song extends Model
     use HasFactory , SoftDeletes;
 
     protected $fillable = [
-        'name',
-        'artist_id',
-        'duration',
-        'category_id',
-        'date_of_release',
-        'image',
-        'size'
+        'name', 'artist_id', 'duration',
+        'category_id', 'date_of_release','image',
+        'size', 'no_of_likes', 'no_of_dislikes',
+        'file_size'
     ];
 
     protected $casts = [
@@ -50,17 +47,7 @@ class Song extends Model
         return $this->hasOne(Category::class);
     }
 
-//    public function read_to_database($file)
-//    {
-//        $open = fopen('' , 'r');
-//
-//        while (!feof($open)){
-//            $current_line_in_file = fgets($open);
-//            $break = explode(',' , $current_line_in_file);
-//
-//        }
-//
-//    }
+
 
 
 }

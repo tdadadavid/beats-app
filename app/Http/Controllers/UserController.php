@@ -4,14 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use App\Notifications\WelcomeNotificationEmail;
 use App\traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use JetBrains\PhpStorm\ArrayShape;
 use Throwable;
 
 class UserController extends Controller
