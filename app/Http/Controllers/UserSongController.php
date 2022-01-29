@@ -24,40 +24,27 @@ class UserSongController extends ApiController
 
     public function subscribe(User $user, Song $song): JsonResponse
     {
-        // check whether the song exist
-        $itsExists = Song::where('id', '=', $song->id)->exists();
-        if (!$itsExists)
-            return $this->errorResponse("There is no song as such", 404);
+        if(!$song->songExists($song))
+            return $this->errorResponse("Song does not exits." ,404);
 
-        // check whether this user has subscribed to this song
-        $userPlaylist = $user->songs()->get();
+        if($user->isASubscriber($song))
+            return $this->errorResponse("Error, You're already subscribed to this song" , 403);
 
-
-        $arr = [];
-        $index = 0;
-        foreach ($userPlaylist as $singleSong){
-            $arr[$index] = $singleSong['id'];
-            $index++;
-        }
-
-        // if the user is a subscriber then return error
-        if(in_array($song->id , $arr))
-            return $this->errorResponse("You're already a subscriber to this song", 409);
-
-
-        // if not subscribe the user
-        $user->songs()->attach($song->id);
-        $user->refresh();
+        $user->subscribe($song)->refresh();
 
         return $this->showOne("Subscription successful");
-
     }
 
     public function unsubscribe(User $user , Song $song): JsonResponse
     {
-        $user->songs()->detach($song->id);
+        if (!$user->isASubscriber($song))
+            return $this->errorResponse("You're not a subscriber to this song" , 404);
+
+        $user->unsubscribe($song)->refresh();
 
         return $this->showOne("You've successfully unsubscribed");
     }
+
+    // work on a user ability to like and dislike a song
 
 }

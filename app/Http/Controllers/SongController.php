@@ -5,14 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Resources\SongResource;
 use App\Models\Song;
 use App\traits\ApiResponse;
-use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class SongController extends Controller
 {
     use ApiResponse;
-
 
     public function index(): JsonResponse
     {
@@ -50,7 +48,6 @@ class SongController extends Controller
         $newSong = SongResource::make($newSong);
         return $this->showOne($newSong);
     }
-
 
     public function show(Song $song): JsonResponse
     {

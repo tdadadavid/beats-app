@@ -47,8 +47,10 @@ class Song extends Model
         return $this->hasOne(Category::class);
     }
 
-
-
+    public function songExists(Song $song): bool
+    {
+       return Song::where('id' , $song->id)->exists();
+    }
 
 }
 

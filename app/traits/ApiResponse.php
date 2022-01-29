@@ -10,12 +10,12 @@ trait ApiResponse
 {
     private function successResponse($data , $code): JsonResponse
     {
-        return response()->json(['data' => $data] , $code);
+        return response()->json(['data' => $data , "code" => $code] , $code);
     }
 
     private function singleSuccessResponse($data , $code): JsonResponse
     {
-        return response()->json(["data" => $data], $code);
+        return response()->json(["data" => $data , "code" => $code], $code);
     }
 
     public function showAll($data , $code = 200): JsonResponse
