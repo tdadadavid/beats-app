@@ -24,6 +24,8 @@ class UserLoginController extends ApiController
         // try to see if this user exists
         // or else throw error message
         try {
+//            $request->isAnExistingUser();
+
             $user = User::where('email', $request->email)->firstOrFail();
         }
         catch (ModelNotFoundException $notFoundException) {

@@ -57,7 +57,7 @@ class User extends Authenticatable
         return $this->verified ===  self::VERIFIED;
     }
 
-    public function isASubscriber(Song $song): bool
+    public function isSubscribed(Song $song): bool
     {
         // check whether this user has subscribed to this song
         return $this->songs()->where('id' , $song->id)->exists();

@@ -65,6 +65,8 @@ class SongController extends Controller
 
         $this->validate($request , $rules);
 
+        // create an update function in my model
+
         // Update the song
         $song->name = $request->name ?? $song->name;
         $song->artist_id = $request->artist_id ?? $song->artist_id;

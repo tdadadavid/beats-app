@@ -3,14 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\SongResource;
-use App\Http\Resources\UserResource;
 use App\Models\Song;
 use App\Models\User;
-use Couchbase\ClusterOptions;
-use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Request;
 
 class UserSongController extends ApiController
 {
@@ -27,7 +22,7 @@ class UserSongController extends ApiController
         if(!$song->songExists($song))
             return $this->errorResponse("Song does not exits." ,404);
 
-        if($user->isASubscriber($song))
+        if($user->isSubscribed($song))
             return $this->errorResponse("Error, You're already subscribed to this song" , 403);
 
         $user->subscribe($song)->refresh();
@@ -37,7 +32,7 @@ class UserSongController extends ApiController
 
     public function unsubscribe(User $user , Song $song): JsonResponse
     {
-        if (!$user->isASubscriber($song))
+        if (!$user->isSubscribed($song))
             return $this->errorResponse("You're not a subscriber to this song" , 404);
 
         $user->unsubscribe($song)->refresh();
@@ -45,6 +40,34 @@ class UserSongController extends ApiController
         return $this->showOne("You've successfully unsubscribed");
     }
 
+    public function likeASong(User $user , Song $song)
+    {
+        // a user must be registered to like a song
+        // email the artist if the likes on a
+        // particular song  increased by 10
+        // store the song in the user favorite (I need a database for this)
+    }
+
+    public function dislikeASong(User $user , Song $song)
+    {
+        // a user must be registered to like a song
+        // email the artist if the dislikes on a
+        // particular song  decreased by 10
+        // remove the song from the user favorite (I need a database for this)
+        // return the list of user favorite
+    }
+
+    public function favoriteSongs(User $user)
+    {
+        // the user must be registered
+        // then show the list of user's favorite songs
+    }
+
     // work on a user ability to like and dislike a song
+    // work on the routes and database for these new lines
+    // line of development then, don't forget to create an
+    // email event for the Artist, like and discount counter
+    // check on Aspect Oriented programming and Queues and Jobs'
+    // in Laravel
 
 }

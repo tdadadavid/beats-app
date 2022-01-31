@@ -55,11 +55,22 @@ Route::apiResources([
     'users.songs' => UserSongController::class,
 ]);
 
-Route::post('users/{user}/songs/{song}' , [UserSongController::class , 'subscribe']);
+// I changed from post to get
+// so test it later
+
+// Subscription routes
+Route::get('users/{user}/songs/{song}' , [UserSongController::class , 'subscribe']);
 Route::get('users/{user}/songs/{song}' , [UserSongController::class , 'unsubscribe']);
 
+// Like and dislike Routes
+Route::post('users/{user}/songs/{song}' , [UserSongController::class , 'likeASong']);
+Route::post('users/{user}/songs/{song}' , [UserSongController::class , 'dislikeASong']);
+
+
+// registration routes
 Route::get('/login' , [UserLoginController::class , 'login']);
 Route::post('/register' , [UserRegistrationController::class , 'register']);
 
+// Verification routes
 Route::name('user.resend')->get('users/{user}/resend' , [UserRegistrationController::class, 'sendVerificationCode']);
 Route::name('user.verify')->get('users/verify/{token}' , [UserRegistrationController::class , 'verifyEmail']);
